@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User's full name" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "photoURL": { "type": "string", "description": "User's profile picture URL" },
+        "role": { "type": "string", "enum": ["user", "admin"], "description": "User's role" },
+        "theme": { "type": "string", "description": "User's preferred theme" },
+        "lastActive": { "type": "string", "format": "date-time", "description": "Last activity timestamp" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation date" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Idea": {
+      "title": "Idea",
+      "description": "Startup idea analysis",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique idea ID" },
+        "authorId": { "type": "string", "description": "UID of the user who created the idea" },
+        "authorName": { "type": "string", "description": "Name of the author" },
+        "authorPhoto": { "type": "string", "description": "Photo URL of the author" },
+        "title": { "type": "string", "description": "Title of the idea" },
+        "description": { "type": "string", "description": "Full description of the idea" },
+        "viability_score": { "type": "number", "description": "AI-generated score" },
+        "analysis": { "type": "object", "description": "Full AI analysis JSON" },
+        "sharks": { "type": "array", "description": "Shark Tank feedback" },
+        "improvement": { "type": "object", "description": "Improved idea suggestions" },
+        "prediction": { "type": "object", "description": "Future success prediction" },
+        "visibility": { "type": "string", "enum": ["private", "public"], "description": "Visibility of the idea" },
+        "likesCount": { "type": "number", "description": "Number of likes" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation date" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update date" }
+      },
+      "required": ["authorId", "title", "description", "viability_score"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "User like on an idea",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the user who liked" },
+        "ideaId": { "type": "string", "description": "ID of the liked idea" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "ideaId"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Comment on an idea",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ideaId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ideaId", "userId", "text"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User feedback, bug reports, or suggestions",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the user who submitted" },
+        "userEmail": { "type": "string", "description": "Email of the user who submitted" },
+        "type": { "type": "string", "enum": ["bug", "improvement", "other"], "description": "Type of feedback" },
+        "message": { "type": "string", "description": "Feedback message" },
+        "status": { "type": "string", "enum": ["new", "in-progress", "resolved"], "description": "Status of the feedback" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/ideas/{ideaId}": { "schema": "Idea", "description": "Startup ideas" },
+    "/likes/{likeId}": { "schema": "Like", "description": "Likes tracking" },
+    "/comments/{commentId}": { "schema": "Comment", "description": "Comments on ideas" },
+    "/feedback/{feedbackId}": { "schema": "Feedback", "description": "User feedback" }
+  }
+}
